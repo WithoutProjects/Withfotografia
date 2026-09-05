@@ -267,6 +267,17 @@
   .precio-card ul li:first-child{ border-top:none; }
   .precio-card ul li::before{ content:"—"; color:var(--gold); flex-shrink:0; }
 
+  /* ---------- BOOKING / CALENDAR ---------- */
+  .booking{ padding:100px 0; background:var(--paper); }
+  .booking-frame{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--cream);
+    box-shadow:0 18px 40px rgba(43,36,28,0.08);
+  }
+  .booking-frame iframe{ display:block; width:100%; }
+
   /* ---------- CONTACT / FOOTER ---------- */
   footer{
     padding:90px 0 40px;
@@ -324,6 +335,7 @@
       <a href="#navidad">Sesiones de Navidad</a>
       <a href="#trabajos">Trabajos</a>
       <a href="#precios">Precios</a>
+      <a href="#reserva">Reserva</a>
       <a href="#contacto">Contacto</a>
       <a class="btn btn-primary" href="https://wa.me/34744452348" target="_blank" rel="noopener">Reservar</a>
     </div>
@@ -450,6 +462,21 @@
         </ul>
         <a class="btn btn-outline" href="https://wa.me/34744452348" target="_blank" rel="noopener">Pedir presupuesto</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="booking" id="reserva">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Reserva</span>
+      <h2>Elige tu día y tu hora</h2>
+      <p>Consulta los huecos disponibles y reserva directamente — se confirma al momento y queda anotado en mi calendario.</p>
+    </div>
+    <div class="booking-frame">
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1uWu2nUBmj2-_sjsF4fmTDvOJ0CHO40lq6Rb13CfryqXxeryXbdpBL22NTP5MkVVv4KeN8wQPp?gv=true" style="border: 0" width="100%" height="600" frameborder="0"></iframe>
+      <!-- end Google Calendar Appointment Scheduling -->
     </div>
   </div>
 </section>
