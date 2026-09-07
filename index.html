@@ -269,14 +269,61 @@
 
   /* ---------- BOOKING / CALENDAR ---------- */
   .booking{ padding:100px 0; background:var(--paper); }
-  .booking-frame{
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    overflow:hidden;
+  .cal-card{
+    max-width:520px; margin:0 auto;
     background:var(--cream);
-    box-shadow:0 18px 40px rgba(43,36,28,0.08);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:34px 30px 26px;
+    box-shadow:0 24px 60px rgba(43,36,28,0.10);
   }
-  .booking-frame iframe{ display:block; width:100%; }
+  .cal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:24px;
+  }
+  .cal-month{
+    font-family:'Fraunces', serif; font-size:20px; color:var(--ink);
+    text-transform:capitalize;
+  }
+  .cal-nav{
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--line); background:transparent;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--ink); transition:background .15s ease;
+  }
+  .cal-nav:hover{ background:rgba(43,36,28,0.06); }
+  .cal-nav svg{ width:16px; height:16px; }
+  .cal-weekdays{
+    display:grid; grid-template-columns:repeat(7,1fr);
+    margin-bottom:8px;
+  }
+  .cal-weekdays span{
+    text-align:center; font-size:12px; font-weight:600;
+    color:var(--ink-soft); letter-spacing:.03em;
+  }
+  .cal-grid{
+    display:grid; grid-template-columns:repeat(7,1fr);
+    gap:4px;
+  }
+  .cal-day{
+    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+    font-size:14.5px; color:var(--ink);
+    border-radius:50%;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+    font-family:'Work Sans', sans-serif;
+  }
+  .cal-day:hover{ background:var(--sage); color:var(--paper); }
+  .cal-day.today{ border:1px solid var(--gold); }
+  .cal-day.empty{ visibility:hidden; cursor:default; }
+  .cal-day.past{ color:rgba(43,36,28,0.28); cursor:default; }
+  .cal-day.past:hover{ background:transparent; color:rgba(43,36,28,0.28); }
+  .cal-foot{
+    margin-top:22px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:13px; color:var(--ink-soft); text-align:center;
+  }
 
   /* ---------- CONTACT / FOOTER ---------- */
   footer{
@@ -385,7 +432,7 @@
       <div class="pack featured">
         <span class="pack-badge">El más pedido</span>
         <div class="pack-name">Pack</div>
-        <span class="pack-strike">170€</span>
+        <span class="pack-strike">120€</span>
         <div class="pack-price">85<sup>€</sup></div>
         <p class="pack-desc">El equilibrio perfecto entre tiempo y recuerdos.</p>
         <ul class="pack-includes">
@@ -398,7 +445,7 @@
 
       <div class="pack">
         <div class="pack-name">Pack Completo</div>
-        <span class="pack-strike">200€</span>
+        <span class="pack-strike">150€</span>
         <div class="pack-price">100<sup>€</sup></div>
         <p class="pack-desc">Para familias numerosas o quien no quiere prisas.</p>
         <ul class="pack-includes">
@@ -468,15 +515,27 @@
 
 <section class="booking" id="reserva">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head" style="margin-left:auto;margin-right:auto;text-align:center;">
       <span class="kicker">Reserva</span>
-      <h2>Elige tu día y tu hora</h2>
-      <p>Consulta los huecos disponibles y reserva directamente — se confirma al momento y queda anotado en mi calendario.</p>
+      <h2>Elige el día que te venga bien</h2>
+      <p style="margin-left:auto;margin-right:auto;">Pulsa un día del calendario y te abrirá WhatsApp con un mensaje listo para enviar — te confirmo la hora en cuanto lo vea.</p>
     </div>
-    <div class="booking-frame">
-      <!-- Google Calendar Appointment Scheduling begin -->
-      <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1uWu2nUBmj2-_sjsF4fmTDvOJ0CHO40lq6Rb13CfryqXxeryXbdpBL22NTP5MkVVv4KeN8wQPp?gv=true" style="border: 0" width="100%" height="600" frameborder="0"></iframe>
-      <!-- end Google Calendar Appointment Scheduling -->
+
+    <div class="cal-card">
+      <div class="cal-head">
+        <button type="button" class="cal-nav" id="calPrev" aria-label="Mes anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <span class="cal-month" id="calMonthLabel">Septiembre 2026</span>
+        <button type="button" class="cal-nav" id="calNext" aria-label="Mes siguiente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="cal-weekdays">
+        <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-foot">Pulsa un día para escribirme por WhatsApp y confirmar la hora</div>
     </div>
   </div>
 </section>
@@ -502,6 +561,74 @@
 <a class="wa-float" href="https://wa.me/34744452348" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
   <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16.001 3C9.109 3 3.5 8.609 3.5 15.501c0 2.44.686 4.797 1.984 6.844L3 29l6.82-2.437a12.44 12.44 0 0 0 6.18 1.64h.005c6.892 0 12.5-5.609 12.5-12.501C28.505 8.61 22.897 3 16.001 3Zm0 22.876h-.004a10.34 10.34 0 0 1-5.27-1.444l-.378-.224-4.05 1.447 1.324-3.947-.246-.406a10.36 10.36 0 0 1-1.594-5.5c0-5.723 4.658-10.379 10.386-10.379 2.773 0 5.379 1.081 7.34 3.043a10.31 10.31 0 0 1 3.043 7.34c0 5.724-4.659 10.38-10.551 10.38Zm5.686-7.775c-.312-.156-1.844-.911-2.13-1.015-.286-.104-.494-.156-.702.156-.208.312-.807 1.014-.99 1.223-.182.208-.364.234-.676.078-.312-.156-1.317-.485-2.508-1.548-.927-.826-1.553-1.847-1.735-2.16-.182-.312-.02-.48.137-.636.14-.14.312-.364.468-.546.156-.182.208-.312.312-.52.104-.208.052-.39-.026-.546-.078-.156-.702-1.69-.962-2.315-.253-.61-.51-.527-.702-.537l-.598-.01c-.208 0-.546.078-.832.39-.286.312-1.09 1.066-1.09 2.6 0 1.534 1.116 3.016 1.272 3.224.156.208 2.196 3.354 5.32 4.702.743.321 1.323.513 1.775.657.746.237 1.424.203 1.96.123.598-.089 1.844-.754 2.104-1.482.26-.728.26-1.352.182-1.482-.078-.13-.286-.208-.598-.364Z"/></svg>
 </a>
+
+<script>
+  (function(){
+    const WA_NUMBER = "34744452348";
+    const monthNames = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+    const grid = document.getElementById('calGrid');
+    const label = document.getElementById('calMonthLabel');
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    let viewDate = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    function render(){
+      grid.innerHTML = "";
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
+      label.textContent = monthNames[month] + " " + year;
+
+      const firstDay = new Date(year, month, 1);
+      // Monday-first index (0 = Monday ... 6 = Sunday)
+      let startIndex = firstDay.getDay() - 1;
+      if(startIndex < 0) startIndex = 6;
+
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for(let i=0; i<startIndex; i++){
+        const empty = document.createElement('span');
+        empty.className = 'cal-day empty';
+        grid.appendChild(empty);
+      }
+
+      for(let d=1; d<=daysInMonth; d++){
+        const cellDate = new Date(year, month, d);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-day';
+        btn.textContent = d;
+
+        if(cellDate.getTime() === today.getTime()){
+          btn.classList.add('today');
+        }
+
+        if(cellDate < today){
+          btn.classList.add('past');
+          btn.disabled = true;
+        } else {
+          btn.addEventListener('click', () => {
+            const fecha = d + " de " + monthNames[month] + " de " + year;
+            const mensaje = "¡Hola! Me gustaría reservar una sesión de fotos para el día " + fecha + ". ¿Qué horas tienes disponibles?";
+            const url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(mensaje);
+            window.open(url, '_blank', 'noopener');
+          });
+        }
+        grid.appendChild(btn);
+      }
+    }
+
+    document.getElementById('calPrev').addEventListener('click', () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+      render();
+    });
+    document.getElementById('calNext').addEventListener('click', () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+      render();
+    });
+
+    render();
+  })();
+</script>
 
 </body>
 </html>
